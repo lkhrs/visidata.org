@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
     "dev:11ty": "eleventy --serve --watch --quiet",
-    "dev:css": "tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css -w",
+    "dev:css": "tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css -w --minify",
     "build": "npm-run-all build:*",
     "build:api": "pip3 install visidata && sphinx-build -b html visidata/docs/api _site/docs/api",
     "build:docs": "./lukeall.sh",
     "build:11ty": "eleventy",
-    "build:css": "tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css"
+    "build:css": "tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css --minify"
   },
   "keywords": [],
   "author": "",
