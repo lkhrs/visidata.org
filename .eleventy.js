@@ -150,7 +150,6 @@ module.exports = function (eleventyConfig) {
             symbol: "",
             space: false,
             placement: "before",
-            level: [1, 2],
             slugify: (s) =>
                 s
                     .trim()
