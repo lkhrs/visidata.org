@@ -1,5 +1,4 @@
 const Image = require("@11ty/eleventy-img");
-const eleventyGoogleFonts = require("eleventy-google-fonts");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
@@ -7,31 +6,7 @@ const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const { DateTime } = require("luxon");
 
-let markdownLibrary = markdownIt({
-    html: true,
-}).use(markdownItAnchor, {
-    permalink: true,
-    permalinkClass: "heading-anchor",
-    permalinkSymbol: "",
-    permalinkSpace: false,
-    permalinkBefore: true,
-    level: [1, 2],
-    slugify: (s) =>
-        s
-        .trim()
-        .toLowerCase()
-        .replace(/[\s+~\/]/g, "-")
-        .replace(/[().`,%·'"!?¿:@*]/g, ""),
-});
-
-
-const markdownItOptions = {
-    html: true,
-    breaks: true,
-    linkify: true
-}
-
-module.exports = function(eleventyConfig) {
+module.exports = function (eleventyConfig) {
 
     // Use .eleventyignore as single source of truth for files to process.
     eleventyConfig.setUseGitIgnore(false);
@@ -39,7 +14,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addWatchTarget("./styles/tailwind.css");
     eleventyConfig.addWatchTarget("./_site/style.css");
 
-    eleventyConfig.addShortcode("version", function() {
+    eleventyConfig.addShortcode("version", function () {
         return String(Date.now());
     });
     // Filters
@@ -48,7 +23,7 @@ module.exports = function(eleventyConfig) {
         return DateTime.fromJSDate(dateObj).toUTC().toLocaleString(DateTime.DATE_MED);
     });
     // Add a limit function to limit the amount of items output by an array. https://11ty.rocks/eleventyjs/data-arrays/#limit-filter
-    eleventyConfig.addFilter("limit", function(arr, limit) {
+    eleventyConfig.addFilter("limit", function (arr, limit) {
         return arr.slice(0, limit);
     });
     // Random item filter
@@ -68,7 +43,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addFilter("sortByPageOrder", sortByPageOrder);
 
     // {{ variable | jsonify }}
-    eleventyConfig.addFilter('jsonify', function(variable) {
+    eleventyConfig.addFilter('jsonify', function (variable) {
         return JSON.stringify(variable);
     });
 
@@ -77,21 +52,21 @@ module.exports = function(eleventyConfig) {
     // Collections
     eleventyConfig.addCollection('blog', collection => {
 
-            const blogs = collection.getFilteredByTag('blog')
+        const blogs = collection.getFilteredByTag('blog')
 
-            for (let i = 0; i < blogs.length; i++) {
+        for (let i = 0; i < blogs.length; i++) {
 
-                const prevPost = blogs[i - 1]
-                const nextPost = blogs[i + 1]
+            const prevPost = blogs[i - 1]
+            const nextPost = blogs[i + 1]
 
-                blogs[i].data["prevPost"] = prevPost
-                blogs[i].data["nextPost"] = nextPost
+            blogs[i].data["prevPost"] = prevPost
+            blogs[i].data["nextPost"] = nextPost
 
-            }
+        }
 
-            return blogs.reverse()
+        return blogs.reverse()
 
-        }),
+    }),
         eleventyConfig.addCollection('releases', collection => {
 
             const releases = collection.getFilteredByTag('releases')
@@ -132,7 +107,6 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ "./redirects.tsv": "./_redirects" });
 
     // Plugins
-    eleventyConfig.addPlugin(eleventyGoogleFonts);
     eleventyConfig.addPlugin(syntaxHighlight);
     eleventyConfig.addPlugin(eleventyNavigationPlugin);
     eleventyConfig.addPlugin(pluginRss);
@@ -164,7 +138,27 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addLiquidShortcode("image", imageShortcode);
     eleventyConfig.addJavaScriptFunction("image", imageShortcode);
 
-    // Use library for Markdown for anchored headings
+    // Configure markdown-it and add plugin for heading anchors
+    let markdownItOptions = {
+        html: true,
+        breaks: true,
+        linkify: true
+    };
+    let markdownLibrary = markdownIt(markdownItOptions).use(markdownItAnchor, {
+        permalink: markdownItAnchor.permalink.ariaHidden({
+            class: "heading-anchor",
+            symbol: "",
+            space: false,
+            placement: "before",
+            level: [1, 2],
+            slugify: (s) =>
+                s
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[\s+~\/]/g, "-")
+                    .replace(/[().`,%·'"!?¿:@*]/g, ""),
+        })
+    });
     eleventyConfig.setLibrary("md", markdownLibrary);
 
     // Template formats
