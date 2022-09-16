@@ -8,8 +8,10 @@
     <meta name="description" content="{% if meta_description %}{{ meta_description }}{% else %}{{ excerpt }}{% endif %}">
     <meta name="robots" content="index,follow" />
     {# include CSS #}
-    <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" type="text/css" href="/asciinema-player.css">
+    {# TODO: contatenate with a bundler #}
+    <link rel="stylesheet" type="text/css" href="/css/style.css?={% version %}">
+    <link rel="stylesheet" type="text/css" href="/css/inconsolata.css?={% version %}">
+    <link rel="stylesheet" type="text/css" href="/css/asciinema-player.css?={% version %}">
     {# include scripts #}
     <script data-goatcounter="https://visidata.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     {# include social meta tags #}
