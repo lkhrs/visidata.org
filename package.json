@@ -1,12 +1,12 @@
 {
-  "name": "visidata.org",
+  "name": "@visidata/visidata.org",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "run-p dev:*",
-    "dev:11ty": "eleventy --serve --quiet",
-    "dev:css": "tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css -w",
+    "dev:11ty": "eleventy --serve --incremental --quiet",
+    "dev:css": "tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/css/style.css -w",
     "debug": "run-p debug:11ty dev:css",
     "debug:11ty": "DEBUG=Eleventy* eleventy --serve",
     "build": "run-s build:*",
